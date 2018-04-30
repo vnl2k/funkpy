@@ -12,8 +12,8 @@ print(_.array.push([1], 2, 3, [1, 2, 3]))
 
 
 
-addOne = lambda i: Option.pure(i+1)
-print(Option.pure(1).flatMap(addOne) == Option.of(2))
-print(Option.pure(1).flatMap(addOne).flatMap(addOne) == Option.of(1).flatMap(lambda i: addOne(i).flatMap(addOne)))
+addOne = lambda i: Option.of(i+1)
+print(Option.of(1).flatMap(addOne) == Option.of(2))
+print(Option.of(1).flatMap(addOne).flatMap(addOne) == Option.of(1).flatMap(lambda i: addOne(i).flatMap(addOne)))
 
 print(Option.of(2).map(lambda i: i+5))

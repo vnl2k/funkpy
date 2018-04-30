@@ -21,6 +21,19 @@ class Monad:
       F[B]
     """
     return func(self.val)
+
+  def map(self, func):
+    """ (F[A], A => B) => F[B]
+
+    Transforms the value inside the container
+
+    Arguments:
+      func {Function} -- Any function A => B
+
+    Returns:
+      F[B]
+    """
+    return self.flatMap(lambda i: self.__init__(func(i)))
     
 
 
@@ -32,30 +45,71 @@ class Either(Monad):
 
   @staticmethod
   def of(val):
+    """ Class constructor method.
+    A => F[A]
+
+    Arguments:
+      val {A} -- any value type
+
+    Returns:
+      F[A] -- option of any value type
+    """
     if isinstance(val, Exception) or val is None:
       return Either.Left(val)
     return Either([None, val])
 
   @staticmethod
   def pure(val):
+    """ Same as Either.of method """
     if isinstance(val, Exception) or val is None:
       return Either.Left(val)
     return Either([None, val])
 
-  def map(self, f):
-    if len(self.val) == 1:
-      return self
-    return self.of(f(self.val[1]))
+  def flatMap(self, func):
+    """ (F[A], A => F[B]) => F[B]
+
+    Arguments:
+      func {Function} -- A => F[B]
+
+    Returns:
+      F[B]
+    """
+    return self if len(self.val) == 1 else func(self.val[1])
+
+  def map(self, func):
+    """ (F[A], A => B) => F[B]
+
+    Transforms the value inside the container
+
+    Arguments:
+      func {Function} -- Any function A => B
+
+    Returns:
+      F[B]
+    """
+    return self if len(self.val) == 1 else self.of(func(self.val[1]))
 
   @staticmethod
   def Left(val):
     return Either([val])
 
-  def either(self, left, right):
+
+  def either(self, left_func, right_func):
+    """[summary]
+    
+    [description]
+    
+    Arguments:
+      left {Function} -- [description]
+      right {Function} -- [description]
+    
+    Returns:
+      [type] -- [description]
+    """
     if len(self.val) == 1:
-      return left(self.val[0])
+      return left_func(self.val[0])
     else:
-      return right(self.val[1])
+      return right_func(self.val[1])
 
 
 class Option(Monad):
@@ -93,7 +147,7 @@ class Option(Monad):
     Returns:
       F[B]
     """
-    return func(self.val)
+    return self if self == Option.Nothing else func(self.val)
 
   def map(self, func):
     """ (F[A], A => B) => F[B]
@@ -107,8 +161,8 @@ class Option(Monad):
       F[B]
     """
     # return self if self.val == Option.Nothing else Option.of(func(self.val))
-    return self if self.val == Option.Nothing else self.flatMap(lambda i: self.of(func(i)))
+    return self if self == Option.Nothing else self.flatMap(lambda i: self.of(func(i)))
 
   def maybe(self, val2=None):
-    """ Retuns eiher the value inside the container or val2"""
-    return val2 if self.val == Option.Nothing else self.val
+    """ Returns either the value inside the container or val2 """
+    return val2 if self == Option.Nothing else self.val
