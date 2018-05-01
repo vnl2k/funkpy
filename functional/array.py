@@ -1,5 +1,8 @@
 import functools as ft
 
+builtInMap = map
+builtInZip = zip
+
 def isIterable(value): 
   """Checks if the value implements iterator interface
   Arguments:
@@ -34,13 +37,13 @@ def zip(*args):
   Returns:
     list
   """
-  return list(zip(*args))
+  return map(list, builtInZip(*args))
 
-def map(f, *array):
-  return list(map(f, *array))
+def map(func, *arr):
+  return list(builtInMap(func, *arr))
 
-def reduce(f, agg, array):
-  return ft.reduce(f, array, agg)
+def reduce(func, agg, arr):
+  return ft.reduce(func, arr, agg)
 
 def concat(arr=None, *args):
   return ft.reduce(lambda agg, item: (agg.extend(item) if isList(item) else agg.append(item)) or agg, args, arr.copy() if (arr and isList(arr)) else [])

@@ -1,19 +1,14 @@
-import functional as _
-from functional.monads import Option
+import unittest as ut
 
-print(_.array.concat())
-print(_.array.concat([1]))
-print(_.array.concat([1], 1))
-print(_.array.concat(None, 1, 1))
-print(_.array.concat([1,2,3], [1, 2, 3], [1, 2, 3]))
+from functional import array as _
+from functional import monads as M
 
+# tests
+from tests.monads import test_monads
+from tests.array import test_array
 
-print(_.array.push([1], 2, 3, [1, 2, 3]))
+# tests for functional.array
+ut.TextTestRunner(verbosity=2).run(ut.TestLoader().loadTestsFromTestCase(test_array(_, ut)))
 
-
-
-addOne = lambda i: Option.of(i+1)
-print(Option.of(1).flatMap(addOne) == Option.of(2))
-print(Option.of(1).flatMap(addOne).flatMap(addOne) == Option.of(1).flatMap(lambda i: addOne(i).flatMap(addOne)))
-
-print(Option.of(2).map(lambda i: i+5))
+# tests for functional.monads
+ut.TextTestRunner(verbosity=2).run(ut.TestLoader().loadTestsFromTestCase(test_monads(M, ut)))
