@@ -63,3 +63,7 @@ def curry(f):
     return (lambda *args2, **kwargs2: curried(*(args + args2), **dict(kwargs, **kwargs2)))
 
   return curried
+
+def identity(i):
+  """ f[A A](A => A): A"""
+  return i
