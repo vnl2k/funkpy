@@ -25,10 +25,10 @@ def test_array(m, ut):
 
     def test5_array_reduce(self):
       # sum 
-      self.assertEqual(m.reduce(lambda agg, i: agg+i, 0, [1, 2, 3]), 6)
+      self.assertEqual(m.reduce(lambda agg, i: agg+i, [1, 2, 3], 0), 6)
 
       # reduce to dictionary
-      self.assertEqual(m.reduce(lambda agg, i: agg.update({i: i}) or agg, {}, [1, 2, 3]), {1: 1, 2: 2, 3: 3})
+      self.assertEqual(m.reduce(lambda agg, i: agg.update({i: i}) or agg, [1, 2, 3], {}), {1: 1, 2: 2, 3: 3})
 
     def test6_isSomething(self):
       self.assertEqual(m.isIterable([1]), True)

@@ -42,7 +42,7 @@ def zip(*args):
 def map(func, *arr):
   return list(builtInMap(func, *arr))
 
-def reduce(func, agg, arr):
+def reduce(func, arr, agg):
   return ft.reduce(func, arr, agg)
 
 def concat(arr=None, *args):
