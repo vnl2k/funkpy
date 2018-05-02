@@ -39,5 +39,4 @@ addTwo = _.compose(addOne, addOne)
 addTwo([1, 2, 3]) # => [3, 4, 5]
 ```
 
-
-## Monads
+## Functor and Monads
