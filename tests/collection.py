@@ -1,4 +1,4 @@
-def test_array(m, ut):
+def test_collection(m, ut):
 
   class tests(ut.TestCase):
 
