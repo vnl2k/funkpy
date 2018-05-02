@@ -7,7 +7,7 @@ Functional programing is not complete without `curry` and `compose` methods avai
 
 Last but not least are the glorious _functor_ and _monads_ from `functional.monads`, which many people are unfamiliar with.  
 
-_PyFunctional_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it.
+_PyFunctional_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it. Also the implementation here does not make any claims on performance. Whereas, there are no obvious problems, wrapping millions of values in a monad each may not be the right answer.
 
 # Installation
 Copy this repository locally and run `build.py`:
@@ -31,6 +31,12 @@ _.concat(l, [4, 5, 6], [7, 8, 9], 10) # => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # append a list
 _.push(l, [4, 5, 6]) # => [1, 2, 3, [4, 5, 6]]
 
+# It's crazy to curry and compose!
+addOne = _.curry(_.strict_map)(lambda i: i+1)
+addOne([1, 2, 3]) # => [2, 3, 4]
+
+addTwo = _.compose(addOne, addOne)
+addTwo([1, 2, 3]) # => [3, 4, 5]
 ```
 
 
