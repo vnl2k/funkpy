@@ -77,7 +77,7 @@ my_monad = Monad.of(5)
 my_monad == Monad(5) # => True
 
 # So far so good! How about something actually useful?
-my_option = Option.of({"street": "Times Ave"}) \\\
+my_option = Option.of({"street": "Times Ave"}) \
     .map(lambda i: i.get("postcode")) \
     .maybe("postcode not found") # => "postcode not found
 
