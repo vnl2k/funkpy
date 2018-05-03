@@ -14,7 +14,7 @@ class Functor:
     return str(self.val)
 
   @staticmethod
-  def of(val):
+  def of(value):
     """ Class constructor fucntion.
     A => F[A]
 
@@ -24,7 +24,7 @@ class Functor:
     Returns:
       F[A] -- option of any value type
     """
-    return Functor(val)
+    return Functor(value)
 
   def map(self, func):
     """ (F[A], A => B) => F[B]
@@ -37,7 +37,7 @@ class Functor:
     Returns:
       F[B]
     """
-    return self.__init__(func(self.val))
+    return Functor.of(func(self.val))
 
 
 class Monad(Functor):
@@ -126,17 +126,12 @@ class Either(Monad):
     return self if len(self.val) == 1 else self.of(func(self.val[1]))
 
   def either(self, left_func, right_func):
-    """[summary]
-    
-    [description]
+    """Unwraps the container and executes either left_func or right_func depending on the value inside
     
     Arguments:
-      left {Function} -- [description]
-      right {Function} -- [description]
-    
-    Returns:
-      [type] -- [description]
-    """
+      left_func  {Function} -- [description]
+      right_func {Function} -- [description]
+        """
     if len(self.val) == 1:
       return left_func(self.val[0])
     else:
@@ -181,6 +176,6 @@ class Option(Monad):
     return self if self == Option.Nothing else self.flatMap(lambda i: self.of(func(i)))
 
   def maybe(self, val2=None):
-    """ Returns either the value inside the container or val2 """
+    """ Returns either the value inside the container or val2. """
 
     return val2 if self == Option.Nothing else self.val

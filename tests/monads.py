@@ -2,8 +2,11 @@ def test_monads(m, ut):
 
   class tests(ut.TestCase):
 
+    def test0_Functor(self):
+      self.assertEqual(m.Functor.of(1), 1)
+      self.assertEqual(m.Functor.of(1).map(lambda i: i+1), 2)
+
     def test1_either(self):
-      print('Test Either.of(1)')
       self.assertEqual(m.Either.of(1).either(lambda i: i,lambda i: i), 1)
 
     

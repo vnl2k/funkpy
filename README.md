@@ -77,13 +77,15 @@ my_monad = Monad.of(5)
 my_monad == Monad(5) # => True
 
 # So far so good! How about something actually useful?
-my_option = Option.of({"street": "Times Ave"}).map(i => i.get("postcode")).maybe("postcode not found") # => "postcode not found
+my_option = Option.of({"street": "Times Ave"}) \\\
+    .map(lambda i: i.get("postcode")) \
+    .maybe("postcode not found") # => "postcode not found
 
 # Get it? It is an option to have a value or not!"
 ```
 
 # Contributors
-In case someone wants to contribute to this project (for whatever unfathomable reasons that is), here are few rules (for pylint) which differ from [Python's PEP8 style guide](https://www.python.org/dev/peps/pep-0008/)
+In case someone wants to contribute to this project (for whatever unfathomable reasons that is), here are few rules (for pylint) which differ from [Python's PEP8 style guide](https://www.python.org/dev/peps/pep-0008/):
 
 * longer lines are ok  => `max-line-length=150`;
 * but empty spaces are gone => `indent-string='  '` (double space only);
