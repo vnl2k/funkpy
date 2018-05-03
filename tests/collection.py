@@ -6,8 +6,8 @@ def test_collection(m, ut):
       self.assertEqual(m.map(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
       self.assertEqual(m.map(lambda i, j: i + j, [1, 2, 3], [1, 2, 3]), [2, 4, 6])
 
-    def test1a_array_strict_map(self):
-      self.assertEqual(m.strict_map(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
+    def test1a_array_strictMap(self):
+      self.assertEqual(m.strictMap(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
 
     def test2_array_zip(self):
       self.assertEqual(m.zip([1, 2, 3]), [[1], [2], [3]])
@@ -47,7 +47,7 @@ def test_collection(m, ut):
       self.assertEqual(m.isIterable(map(str, [1])), True)
 
     def test7_curry_compose(self):
-      addOne = m.curry(m.strict_map)(lambda i: i+1)
+      addOne = m.curry(m.strictMap)(lambda i: i+1)
       self.assertEqual(addOne([1, 2, 3]), [2, 3, 4])
 
       addTwo = m.compose(addOne, addOne)

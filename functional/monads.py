@@ -13,6 +13,19 @@ class Functor:
   def __str__(self):
     return str(self.val)
 
+  @staticmethod
+  def of(val):
+    """ Class constructor fucntion.
+    A => F[A]
+
+    Arguments:
+      val {A} -- any value type
+
+    Returns:
+      F[A] -- option of any value type
+    """
+    return Functor(val)
+
   def map(self, func):
     """ (F[A], A => B) => F[B]
 
@@ -33,13 +46,13 @@ class Monad(Functor):
   @staticmethod
   def of(val):
     """ Class constructor fucntion. Also known as `pure`.
-    A => F[A]
+    A => M[A]
 
     Arguments:
       val {A} -- any value type
 
     Returns:
-      F[A] -- option of any value type
+      M[A] -- option of any value type
     """
     return Monad(val)
  
@@ -133,7 +146,7 @@ class Either(Monad):
 class Option(Monad):
 
   Nothing = None
-  """ Internal reference to empty element."""
+  """ Internal reference to empty value."""
 
   @staticmethod
   def of(val):

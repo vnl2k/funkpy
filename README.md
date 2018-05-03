@@ -32,11 +32,61 @@ _.concat(l, [4, 5, 6], [7, 8, 9], 10) # => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 _.push(l, [4, 5, 6]) # => [1, 2, 3, [4, 5, 6]]
 
 # It's crazy to curry and compose!
-addOne = _.curry(_.strict_map)(lambda i: i+1)
+addOne = _.curry(_.strictMap)(lambda i: i+1)
 addOne([1, 2, 3]) # => [2, 3, 4]
 
 addTwo = _.compose(addOne, addOne)
 addTwo([1, 2, 3]) # => [3, 4, 5]
 ```
 
-## Functor and Monads
+## Functors and Monads
+A nice introduction to _containers_ of different kinds is Professor Frisby's [Mostly Adequate Guide to Functional Programming](https://github.com/MostlyAdequate/mostly-adequate-guide). If you are looking for a fun IT book to pick, go no further. "Professor Frisby" is hilarious. 
+
+Jokes aside, this package implements:
+* generic `Functor` class with a `map` interface;
+* generic `Monad` class extending `Functor` with `flatMap`;
+* `Option` and `Either` monads.
+
+## Functors
+```python
+from functional.monads import Functor, Monad, Option, Either
+
+# How to construct this functor thing? 
+Functor(5)
+# OR
+Functor.of(5)
+
+# I love mapping functors
+Functor.of("Start here").map(lambda i: i+" and keep walking!")
+
+# and some extra magic for free allows you to compare functors based 
+# on the values they hold
+
+Functor.of(5) == Functor.of(5) # => True (fingers crossed) 
+
+```
+
+`Functor` class is a base class which be extended to do a number of things, i.e. it is a mere template for greater things.
+
+## Monads
+```python
+from functional.monads import Monad, Option, Either
+
+# This looks familiar!
+my_monad = Monad.of(5)
+my_monad == Monad(5) # => True
+
+# So far so good! How about something actually useful?
+my_option = Option.of({"street": "Times Ave"}).map(i => i.get("postcode")).maybe("postcode not found") # => "postcode not found
+
+# Get it? It is an option to have a value or not!"
+```
+
+# Contributors
+In case someone wants to contribute to this project (for whatever unfathomable reasons that is), here are few rules (for pylint) which differ from [Python's PEP8 style guide](https://www.python.org/dev/peps/pep-0008/)
+
+* longer lines are ok  => `max-line-length=150`;
+* but empty spaces are gone => `indent-string='  '` (double space only);
+* and underscore are discouraged in function names => `function-naming-style=camelCase`;
+
+If, heaven forbid, you find a bug, just raise a ticket for it!

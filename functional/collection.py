@@ -4,7 +4,7 @@ from functional.tools import curry, compose
 builtInMap = map
 builtInZip = zip
 
-def isIterable(value): 
+def isIterable(value):
   """Checks if the value implements iterator interface
   Arguments:
     value {any}
@@ -13,7 +13,7 @@ def isIterable(value):
   """
   return hasattr(value, '__iter__')
 
-def isSubscriptable(value): 
+def isSubscriptable(value):
   """Checks if the value is subscriptable
   Arguments:
     value {any}
@@ -43,7 +43,13 @@ def zip(*args):
 def map(func, *arr):
   return list(builtInMap(func, *arr))
 
-def strict_map(func, arr):
+def strictMap(func, arr):
+  """ Applies a function on each element of the array. It is faster that collection.map
+
+  Arguments:
+    func {fucntion}
+    arr {List}
+  """
   return [func(i) for i in arr]
 
 def reduce(func, arr, agg):
@@ -52,7 +58,7 @@ def reduce(func, arr, agg):
 def concat(arr=None, *args):
   return ft.reduce(lambda agg, item: (agg.extend(item) if isIterable(item) else agg.append(item)) or agg, args, arr.copy() if (arr and isList(arr)) else [])
 
-# def strict_concat(arr=None, *args):
+# def strictConcat(arr=None, *args):
 #   return ft.reduce(lambda agg, item: agg.extend(item) or agg, args, arr.copy() if (arr and isList(arr)) else [])
 
 
