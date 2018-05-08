@@ -1,7 +1,7 @@
 import unittest as ut
 
-from functional import collection as _
-from functional import monads as M
+from pyfunctional2 import collection as _
+from pyfunctional2 import monads as M
 
 # tests
 from tests.monads import test_monads

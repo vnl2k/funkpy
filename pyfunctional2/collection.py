@@ -1,5 +1,5 @@
 import functools as ft
-from functional.tools import curry, compose
+from pyfunctional2.tools import curry, compose
 
 builtInMap = map
 builtInZip = zip
