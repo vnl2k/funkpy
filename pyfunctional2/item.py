@@ -3,6 +3,28 @@ import re, math
 from pyfunctional2.tools import compose, curry 
 from pyfunctional2 import collection as _
 
+def map(func, item): 
+  return func(item)
+
+def filter(func, item):
+  return item if func(item) is True else None
+
+def pick(keys, dct):
+  if isinstance(dct, dict):
+    return {k: dct.get(k,None) for k in keys}
+  else:
+    return None
+    
+def get(dct, keys):
+  if isinstance(dct, dict):
+    return {k: dct.get(k, None) for k in keys}
+  else:
+    return None
+
+
+
+
+
 
 
 class doc:
@@ -10,7 +32,6 @@ class doc:
   def __init__(self, data=None):
     if data is not None: 
       self.val = data
-    self.__compose__ = list()
 
   @staticmethod
   def of(data=None):
@@ -22,14 +43,6 @@ class doc:
   def map(self, func):
     return self.of(map(func, self.val))
   
-  def compose(self, arrFuncs):
-    if  len(self.__compose__): self.__compose__.append(arrFuncs) 
-    else: self.__compose__ = arrFuncs
-    
-    return self
-
-  def composeMap(self, *funcs):
-    return self.of(map(compose(*funcs), self.val))
   
   def apply(self, func):
     return self.of(func(self.val))
@@ -38,26 +51,11 @@ class doc:
     return self.of(zip(*self.val))
 
   def reduce(self, func):
-    return self.of(_.reduce(func,self.val))
-
-  def value(self):
-    return self.val
-
-  def eval(self):
-    return self.of(list(self.val))
-
-  def foreach(self, func):
-    for i in self.val: func(i)
-    return self.of(None)
+    return self.of(_.reduce(func, self.val))
     
   def pick(self, keys):
-    def dictGet(keys,dct):
-      if isinstance(dct, dict):
-        return {k: dct.get(k,None) for k in keys}
-      else:
-        return None
     
-    return self.of(dictGet(keys,self.val))
+    return self.of(pick(keys, self.val))
 
   def pickRegex(self,arr):
     regF_arr = map(regTest,arr)
@@ -67,7 +65,7 @@ class doc:
     def extract(dct):
       keys = dct.keys()
       keyArr = map(lambda regF: filter(regF,keys),regF_arr)
-      CgetF = curry(getF)(dct);
+      CgetF = curry(get)(dct);
       # the reduce call concatenates the multiple dictionaries produced by map()
       return _.reduce(updateDct, map(lambda ks: CgetF(ks) ,keyArr), {})
 
@@ -124,5 +122,3 @@ def regTest(reg):
   return test
 
 
-def getF(dct,ks):
-  return {k: dct.get(k, None) for k in ks}
