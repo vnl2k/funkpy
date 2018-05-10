@@ -7,7 +7,7 @@ def apply(func, item):
   return func(item)
 
 def isGood(func, item):
-  return item if func(item) is True else None
+  return func(item) is True
 
 def pick(keys, doc):
   """Picks the provided keys from the dictionary.
@@ -22,6 +22,9 @@ def pick(keys, doc):
   Returns:
     Dictionary
   """
+
+  if not _.isIterable(keys):
+    return None
 
   if not isinstance(doc, dict):
     return None
@@ -47,6 +50,19 @@ def regTest(regex):
 
 
 def get(doc, key):
+  """Gets the value for key from the dictionary.
+  
+  Example
+    get("a", {"a": 1, "b": 2, "c": 3}) # => 1
+
+  Arguments:
+    doc {Dictionary} 
+    key {String}      -- key name
+  
+  Returns:
+    Any or None
+  """
+
   if not isinstance(doc, dict):
     return None
 
@@ -56,7 +72,7 @@ def get(doc, key):
   return doc.get(key, None)
 
 def getValues(doc, keys):
-  if not isinstance(keys, list):
+  if not _.isIterable(keys):
     return None
   return _.map(lambda k: get(doc, k), keys)
 
