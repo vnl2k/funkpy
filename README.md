@@ -90,5 +90,6 @@ In case someone wants to contribute to this project (for whatever unfathomable r
 * longer lines are ok  => `max-line-length=150`;
 * but empty spaces are gone => `indent-string='  '` (double space only);
 * and underscore are discouraged in function names => `function-naming-style=camelCase`;
+* Two spaces required inside a hanging  or continued line => indent-after-paren=2;
 
 If, heaven forbid, you find a bug, just raise a ticket for it!

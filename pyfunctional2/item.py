@@ -3,122 +3,113 @@ import re, math
 from pyfunctional2.tools import compose, curry 
 from pyfunctional2 import collection as _
 
-def map(func, item): 
+def apply(func, item): 
   return func(item)
 
-def filter(func, item):
+def isGood(func, item):
   return item if func(item) is True else None
 
-def pick(keys, dct):
-  if isinstance(dct, dict):
-    return {k: dct.get(k,None) for k in keys}
-  else:
+def pick(keys, doc):
+  """Picks the provided keys from the dictionary.
+  
+  Example
+    pick(["a", "b"], {"a": 1, "b": 2, "c": 3}) # => {"a": 1, "b": 2}
+
+  Arguments:
+    keys {List}      -- list of key names which have to be an exact match
+    doc  {Dictionary} 
+  
+  Returns:
+    Dictionary
+  """
+
+  if not isinstance(doc, dict):
     return None
+
+  return {k: doc.get(k, None) for k in keys}
+
+def pickRegex(keys, doc):
+  if not isinstance(doc, dict):
+    return None
+
+  regex_keys = _.map(regTest, keys)
+
+  extract = lambda doc: pick(_.filter(regex_keys, doc.keys()), doc)
+
+  return extract
+
+def regTest(regex):
+
+  def test(str):
+    return  len(re.compile(regex).findall(str))>0
+
+  return test
+
+
+def get(doc, key):
+  if not isinstance(doc, dict):
+    return None
+
+  if not isinstance(key, str):
+    return None
+
+  return doc.get(key, None)
+
+def getValues(doc, keys):
+  if not isinstance(keys, list):
+    return None
+  return _.map(lambda k: get(doc, k), keys)
+
+def update(doc, new_doc):
+  """ Updates a Dictionary without side-effects.
+  
+  Example
+    dc = {"a": 1, "b": 2, "c": 3}
+    newDC = update(dc, {"d": 4})
+    newDC = update(newDC, ("e", 5)) # => {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5}
     
-def get(dct, keys):
-  if isinstance(dct, dict):
-    return {k: dct.get(k, None) for k in keys}
-  else:
+  Arguments:
+    doc    {Dictionary}
+    newDoc {Dictionary}
+  
+  Returns:
+    Dictionary
+  """
+  if not isinstance(doc, dict):
     return None
 
+  d = doc.copy()
+  return d.update(new_doc) or d
 
 
 
-
-
-
-class doc:
+class Item:
 
   def __init__(self, data=None):
-    if data is not None: 
+    if data != None: 
       self.val = data
 
   @staticmethod
   def of(data=None):
-    return doc(data)
+    return Item(data)
 
   def filter(self, func):
-    return self.of(filter(func, self.val))
+    return self.of(isGood(func, self.val))
 
   def map(self, func):
-    return self.of(map(func, self.val))
-  
+    return self.of(apply(func, self.val))
   
   def apply(self, func):
     return self.of(func(self.val))
-
-  def zip(self):
-    return self.of(zip(*self.val))
-
-  def reduce(self, func):
-    return self.of(_.reduce(func, self.val))
-    
+  
   def pick(self, keys):
-    
     return self.of(pick(keys, self.val))
 
-  def pickRegex(self,arr):
-    regF_arr = map(regTest,arr)
+  def pickRegex(self, keys):
+    return self.of(pickRegex(keys, self.val))
 
-    def updateDct(d,i): d.update(i); return d
+  def get(self, key):
+    return get(self.val, key)
 
-    def extract(dct):
-      keys = dct.keys()
-      keyArr = map(lambda regF: filter(regF,keys),regF_arr)
-      CgetF = curry(get)(dct);
-      # the reduce call concatenates the multiple dictionaries produced by map()
-      return _.reduce(updateDct, map(lambda ks: CgetF(ks) ,keyArr), {})
-
-    return self.of(map(extract,self.val))
-
-  def pickRegexToA(self,regex):
-    regF = regTest(regex)
-    
-    def toArr(dct,k):
-      val = dct.get(k, None)
-      if isinstance(val, dict): val.update({'_name_': k})
-      return val
-    CtoArr = curry(toArr)(self.val);
-
-    return self.of(
-      map( CtoArr, filter(regF,self.val.keys()) )
-    )
-  
-  def getField(self,key):
-
-    def extract(dct):
-      if isinstance(dct,dict): return dct.get(key, None)
-      else: None
-
-    if isinstance(self.val,dict):
-      return self.of(extract(self.val))
-
-    elif isinstance(self.val,list):
-      return self.of(map(extract,self.val))
-
-    else: return None
-
-  def getFieldRegex(self,key):
-    regF = regTest(key);
-
-    def extract(dct):
-      if isinstance(dct,dict): return map(lambda k: dct.get(k, None) , filter(regF,dct.keys()) )
-      else: None
-
-    if isinstance(self.val,dict):
-      return self.of(extract(self.val))
-
-    elif isinstance(self.val,list):
-      return self.of(map(extract,self.val))
-
-    else: return None
-
-
-
-
-def regTest(reg):
-  def test(str):
-    return  re.compile(reg).findall(str).__len__()>0
-  return test
-
-
+  def getValues(self, keys):
+    return getValues(self.val, keys)
