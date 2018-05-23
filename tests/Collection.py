@@ -3,8 +3,16 @@ def test_collection(m, ut):
   class tests(ut.TestCase):
 
     def test1_array_map(self):
-      self.assertEqual(m.map(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
+      inout = [
+        ([1, 2, 3], [2, 3, 4])
+      ]
+      # List
+      self.assertEqual(m.map(lambda i: i + 1, inout[0][0]), inout[0][1])
       self.assertEqual(m.map(lambda i, j: i + j, [1, 2, 3], [1, 2, 3]), [2, 4, 6])
+
+      # Tuple
+      self.assertEqual(m.map(lambda i: i + 1, (1, 2, 3)), (2, 3, 4))
+      # self.assertEqual(m.map(lambda i, j: i + j, (1, 2, 3), (1, 2, 3)), (2, 4, 6))
 
     def test1a_array_strictMap(self):
       self.assertEqual(m.strictMap(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
@@ -52,5 +60,8 @@ def test_collection(m, ut):
 
       addTwo = m.compose(addOne, addOne)
       self.assertEqual(addTwo([1, 2, 3]), [3, 4, 5])
+
+    def test8_filter(self):
+      self.assertEqual(m.filter(lambda i: i>2, [1, 2, 3]), [3])
 
   return tests
