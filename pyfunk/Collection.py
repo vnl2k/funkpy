@@ -2,10 +2,24 @@ import functools as ft
 import builtins 
 from pyfunk.utils import curry, compose
 
-_zip = builtins.zip
+def _zip(*iterables):
+
+  target_class = getattr(builtins, type(iterables[0]).__name__)
+  sentinel = object()
+  iterators = [iter(it) for it in iterables]
+
+  while iterators:
+    result = []
+    for it in iterators:
+      elem = next(it, sentinel)
+      if elem is sentinel:
+        return
+      result.append(elem)
+
+    yield target_class(result)
 
 def _filter(func, arr):
-  return getattr(builtins, type(arr[0]).__name__)(builtins.filter(func, arr))
+  return getattr(builtins, type(arr).__name__)(builtins.filter(func, arr))
 
 def _map(func, *arr): 
   return getattr(builtins, type(arr[0]).__name__)(builtins.map(func, *arr))
@@ -50,7 +64,8 @@ def zip(*args):
   Returns:
     list
   """
-  return _map(list, _zip(*args))
+  # return list(_zip(*args))
+  return list(_zip(*args))
 
 def map(func, *arr):
   """ Applies a function on each element of the collection and returns a new collection.
@@ -90,10 +105,6 @@ def reduce(func, arr, agg):
 
 def concat(arr=None, *args):
   return ft.reduce(lambda agg, item: (agg.extend(item) if isIterable(item) else agg.append(item)) or agg, args, arr.copy() if (arr and isList(arr)) else [])
-
-# def strictConcat(arr=None, *args):
-#   return ft.reduce(lambda agg, item: agg.extend(item) or agg, args, arr.copy() if (arr and isList(arr)) else [])
-
 
 def push(arr=None, *args):
   return ft.reduce(lambda agg, item: agg.append(item) or agg, args, arr.copy() if (arr and isList(arr)) else [])

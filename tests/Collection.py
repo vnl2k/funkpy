@@ -12,7 +12,8 @@ def test_collection(m, ut):
 
       # Tuple
       self.assertEqual(m.map(lambda i: i + 1, (1, 2, 3)), (2, 3, 4))
-      # self.assertEqual(m.map(lambda i, j: i + j, (1, 2, 3), (1, 2, 3)), (2, 4, 6))
+      # the class of the first sequence determines the class of the returned sequence
+      self.assertEqual(m.map(lambda i, j: i + j, (1, 2, 3), [1, 2, 3]), (2, 4, 6))
 
     def test1a_array_strictMap(self):
       self.assertEqual(m.strictMap(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
@@ -20,9 +21,10 @@ def test_collection(m, ut):
     def test2_array_zip(self):
       self.assertEqual(m.zip([1, 2, 3]), [[1], [2], [3]])
       self.assertEqual(m.zip([1, 2, 3], [1, 2, 3]), [[1, 1], [2, 2], [3, 3]])
-
-    def test2a_array_zip(self):
       self.assertEqual(m.zip(*[[1, 2, 3], [1, 2, 3]]), [[1, 1], [2, 2], [3, 3]])
+
+      # tupels
+      # self.assertEqual(m.zip((1, 2, 3)), [(1), (2), (3)])
 
     def test3_array_concat(self):
       self.assertEqual(m.concat(), [])
@@ -63,5 +65,6 @@ def test_collection(m, ut):
 
     def test8_filter(self):
       self.assertEqual(m.filter(lambda i: i>2, [1, 2, 3]), [3])
+      self.assertEqual(m.filter(lambda i: i>2, (1, 2, 3)), (3))
 
   return tests
