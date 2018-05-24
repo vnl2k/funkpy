@@ -4,3 +4,4 @@ import funkpy.Monads
 import funkpy.Object
 
 __version__ = "0.0.15"
+__name__ = "funkpy"

@@ -1,9 +1,9 @@
 from setuptools import setup
-from pyfunctional2 import __version__
+from funkpy import __version__, __name__
 setup(
-  name="pyfunctional2",
+  name=__name__,
   version=__version__,
-  packages=['pyfunctional2'],
+  packages=[__name__],
   author="Nikolay L. Vaklev",
   license='MIT',
   python_requires='>=3.4'

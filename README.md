@@ -7,13 +7,13 @@ Functional programing is not complete without `curry` and `compose` methods avai
 
 Last but not least are the glorious _functor_ and _monads_ from `funkpy.Monads`, which many people are unfamiliar with.  
 
-_PyFunctional2_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it. Also the implementation here does not make any claims on performance. Whereas, there are no obvious problems, wrapping millions of values in a monad each may not be the right answer.
+_FunkPy_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it. Also the implementation here does not make any claims on performance. Whereas, there are no obvious problems, wrapping millions of values in a monad each may not be the right answer.
 
 # Installation
 Copy this repository locally and run `build.py`:
 ```bash
 python3 build.py # to generates tar.gz file
-pip3 install funkpy*
+pip3 install funkpy-x.x.x.tar.gz
 ```
 _Tested for Unix systems only._
 
