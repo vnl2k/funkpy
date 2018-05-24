@@ -3,11 +3,8 @@ def test_collection(m, ut):
   class tests(ut.TestCase):
 
     def test1_array_map(self):
-      inout = [
-        ([1, 2, 3], [2, 3, 4])
-      ]
       # List
-      self.assertEqual(m.map(lambda i: i + 1, inout[0][0]), inout[0][1])
+      self.assertEqual(m.map(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
       self.assertEqual(m.map(lambda i, j: i + j, [1, 2, 3], [1, 2, 3]), [2, 4, 6])
 
       # Tuple
@@ -15,16 +12,25 @@ def test_collection(m, ut):
       # the class of the first sequence determines the class of the returned sequence
       self.assertEqual(m.map(lambda i, j: i + j, (1, 2, 3), [1, 2, 3]), (2, 4, 6))
 
+      # Set
+      self.assertEqual(m.map(lambda i: i + 1, {1, 2, 3}), {2, 3, 4})
+      self.assertEqual(m.map(lambda i, j: i + j, {1, 2, 3}, (1, 2, 3)), {2, 4, 6})
+      
     def test1a_array_strictMap(self):
       self.assertEqual(m.strictMap(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
+      self.assertEqual(m.strictMap(lambda i: i + 1, (1, 2, 3)), (2, 3, 4))
+      self.assertEqual(m.strictMap(lambda i: i + 1, {1, 2, 3}), {2, 3, 4})
 
     def test2_array_zip(self):
+
+      # zip list
       self.assertEqual(m.zip([1, 2, 3]), [[1], [2], [3]])
       self.assertEqual(m.zip([1, 2, 3], [1, 2, 3]), [[1, 1], [2, 2], [3, 3]])
       self.assertEqual(m.zip(*[[1, 2, 3], [1, 2, 3]]), [[1, 1], [2, 2], [3, 3]])
 
-      # tupels
-      # self.assertEqual(m.zip((1, 2, 3)), [(1), (2), (3)])
+      # zip tupel
+      self.assertEqual(m.zip((1, 2, 3)), ((1,), (2,), (3,)))
+      self.assertEqual(m.zip((1, 2, 3), (1, 2, 3)), ((1, 1), (2, 2), (3, 3)))
 
     def test3_array_concat(self):
       self.assertEqual(m.concat(), [])
@@ -32,10 +38,6 @@ def test_collection(m, ut):
       self.assertEqual(m.concat([1], 1), [1, 1])
       self.assertEqual(m.concat(None, 1, 1), [1, 1])
       self.assertEqual(m.concat([1,2,3], [1, 2, 3], [1, 2, 3]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
-
-    # def test3a_array_strict_concat(self):
-    #   self.assertEqual(m.strict_concat(), [])
-    #   self.assertEqual(m.strict_concat([1]), [1])
 
     def test4_array_push(self):
       self.assertEqual(m.push([1], 2, 3, [1, 2, 3]), [1, 2, 3, [1, 2, 3]])
@@ -64,7 +66,15 @@ def test_collection(m, ut):
       self.assertEqual(addTwo([1, 2, 3]), [3, 4, 5])
 
     def test8_filter(self):
+      # list
       self.assertEqual(m.filter(lambda i: i>2, [1, 2, 3]), [3])
-      self.assertEqual(m.filter(lambda i: i>2, (1, 2, 3)), (3))
+      
+      # tuples
+      self.assertEqual(m.filter(lambda i: i>2, (1, 2, 3)), (3, ))
+      self.assertEqual(m.filter(lambda i: i>1, (1, 2, 3)), (2, 3))
 
+    def test8_forEach(self):
+      # list
+      newList = []
+      self.assertEqual(m.forEach(lambda i: newList.append(i + 1), [1, 2, 3]) or newList, [2, 3, 4])
   return tests

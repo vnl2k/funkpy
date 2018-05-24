@@ -2,9 +2,20 @@ import functools as ft
 import builtins 
 from pyfunk.utils import curry, compose
 
-def _zip(*iterables):
+def _getClass(iterable):
+  return getattr(builtins, type(iterable).__name__)
 
-  target_class = getattr(builtins, type(iterables[0]).__name__)
+def _zip(*iterables):
+  """Zips a tuple of iterables.
+  
+  Arguments:
+    iterables {tuple} -- N arguments
+  
+  Yields:
+    iterable
+  """
+
+  target_class = _getClass(iterables[0])
   sentinel = object()
   iterators = [iter(it) for it in iterables]
 
@@ -18,11 +29,11 @@ def _zip(*iterables):
 
     yield target_class(result)
 
-def _filter(func, arr):
-  return getattr(builtins, type(arr).__name__)(builtins.filter(func, arr))
+def _filter(func, iterable):
+  return _getClass(iterable)(builtins.filter(func, iterable))
 
-def _map(func, *arr): 
-  return getattr(builtins, type(arr[0]).__name__)(builtins.map(func, *arr))
+def _map(func, *iterables): 
+  return _getClass(iterables[0])(builtins.map(func, *iterables))
 
 def isIterable(value):
   """ Checks if the value implements iterator interface.
@@ -54,51 +65,69 @@ def isList(value):
   """
   return isIterable(value) and isSubscriptable(value)
 
-def zip(*args):
+def zip(*iterables):
   """ Zips collections together. 
 
   The collections can be of different length.
+
+  Examples:
+    # zip lists
+    zip([1, 2, 3] # =>[[1], [2], [3]]
+    zip([1, 2, 3], [1, 2, 3]) # => [[1, 1], [2, 2], [3, 3]]
+    zip(*[[1, 2, 3], [1, 2, 3]]) # => [[1, 1], [2, 2], [3, 3]]
+
+    # zip tupel
+    zip((1, 2, 3)) # => ((1,), (2,), (3,))
+    zip((1, 2, 3), (1, 2, 3)) # => ((1, 1), (2, 2), (3, 3))
   
   Arguments:
-    args {list}
+    iterables {tuple} -- N arguments
   Returns:
-    list
+    collection
   """
-  # return list(_zip(*args))
-  return list(_zip(*args))
+  return _getClass(iterables[0])(_zip(*iterables))
 
-def map(func, *arr):
+def map(func, *iterables):
   """ Applies a function on each element of the collection and returns a new collection.
   
   Arguments:
-    func {function}
-    *arr {tuple}    -- N arguments
+    func      {function}
+    iterables {tuple}    -- N arguments
   
   Returns:
-    [type] -- [description]
+    collection
   """
-  return _map(func, *arr)
+  return _map(func, *iterables)
 
-def strictMap(func, arr):
+def strictMap(func, iterable):
   """ Applies a function on each element of the collection and returns a new collection. 
   It is faster that collection.map
 
   Arguments:
-    func {fucntion}
-    arr {List}
-  """
-  return [func(i) for i in arr]
+    func     {fucntion}
+    iterable {collection}
 
-def forEach(func, *arr):
-  """ Applies a function on each element of the collection
+  Returns:
+    collection
+  """
+  return _getClass(iterable)(func(i) for i in iterable)
+
+def forEach(func, *iterables):
+  """ Applies a function on each element of the collection.
   
-  Example
+  Examples:
+    newList = []
+    forEach(lambda i: newList.append(i + 1), [1, 2, 3]) or newList # => [2, 3, 4]
   
   Arguments:
-    func {func} 
-    *arr {tuple} -- one or many arguments
+    func      {func} 
+    iterables {tuple} -- N arguments
+
+  Returns:
+    None
   """
-  _map(func, *arr)
+  _map(func, *iterables)
+  return None
 
 def reduce(func, arr, agg):
   return ft.reduce(func, arr, agg)
