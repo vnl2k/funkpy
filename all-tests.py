@@ -1,8 +1,8 @@
 import unittest as ut
 
-from pyfunk import Collection as _
-from pyfunk import Monads as M
-from pyfunk import Object
+from funkpy import Collection as _
+from funkpy import Monads as M
+from funkpy import Object
 
 # tests
 from tests.Monads import test_monads

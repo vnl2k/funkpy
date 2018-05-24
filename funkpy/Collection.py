@@ -1,6 +1,6 @@
 import functools as ft
 import builtins 
-from pyfunk.utils import curry, compose
+from funkpy.utils import curry, compose
 
 def _getClass(iterable):
   return getattr(builtins, type(iterable).__name__)

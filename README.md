@@ -1,11 +1,11 @@
-# PyFunctional2
-_PyFunctional2_ is a small library which is trying to bring a few well-established concepts from functional programing to Python. The package was inspired by libraries like [lodash](https://lodash.com/) and [rambdajs](http://ramdajs.com/). The monads section is modeled after [Scala](https://www.scala-lang.org/) and influenced heavily by ["Scala with Cats"](https://underscore.io/books/scala-with-cats/)
+# FunkPy
+_FunkPy_ is a small library which is trying to bring a few well-established concepts from functional programing to Python. The package was inspired by libraries like [lodash](https://lodash.com/) and [rambdajs](http://ramdajs.com/). The monads section is modeled after [Scala](https://www.scala-lang.org/) and influenced heavily by ["Scala with Cats"](https://underscore.io/books/scala-with-cats/)
 
-One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can incredibly powerful if one needs to efficiently process thousands of entries in list. They less convenient when the list has just 3 items. Hence, `pyfunctional2.collection` was born. `collection` provides an implementation for side-effect free operations on lists, whereas most in-built list operations are anything but.
+One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can incredibly powerful if one needs to efficiently process thousands of entries in list. They less convenient when the list has just 3 items. Hence, `funkpy.Collection` was born. `Collection` provides an implementation for side-effect free operations on lists, whereas most in-built list operations are anything but.
 
-Functional programing is not complete without `curry` and `compose` methods available directly from `pyfunctional2.tools` or `pyfunctional2.collection`.
+Functional programing is not complete without `curry` and `compose` methods available directly from `funkpy.uitls` or `funkpy.Collection`.
 
-Last but not least are the glorious _functor_ and _monads_ from `pyfunctional2.monads`, which many people are unfamiliar with.  
+Last but not least are the glorious _functor_ and _monads_ from `funkpy.Monads`, which many people are unfamiliar with.  
 
 _PyFunctional2_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it. Also the implementation here does not make any claims on performance. Whereas, there are no obvious problems, wrapping millions of values in a monad each may not be the right answer.
 
@@ -13,7 +13,7 @@ _PyFunctional2_ is not an attempt to re-define Python itself. It provides just a
 Copy this repository locally and run `build.py`:
 ```bash
 python3 build.py # to generates tar.gz file
-pip3 install pyfunctional2*
+pip3 install funkpy*
 ```
 _Tested for Unix systems only._
 
@@ -22,7 +22,7 @@ _Tested for Unix systems only._
 ## Collection
 
 ```python
-from pyfunctional2 import collection as _
+from funkpy import collection as _
 
 l = [1, 2, 3]
 # concatenate n lists
@@ -49,7 +49,7 @@ Jokes aside, this package implements:
 
 ## Functors
 ```python
-from pyfunctional2.monads import Functor, Monad, Option, Either
+from funkpy.Monads import Functor, Monad, Option, Either
 
 # How to construct this functor thing? 
 Functor(5)
@@ -70,7 +70,7 @@ Functor.of(5) == Functor.of(5) # => True (fingers crossed)
 
 ## Monads
 ```python
-from functional.monads import Monad, Option, Either
+from funkpy.Monads import Monad, Option, Either
 
 # This looks familiar!
 my_monad = Monad.of(5)
