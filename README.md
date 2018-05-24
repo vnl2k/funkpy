@@ -22,7 +22,7 @@ _Tested for Unix systems only._
 ## Collection
 
 ```python
-from funkpy import collection as _
+from funkpy import Collection as _
 
 l = [1, 2, 3]
 # concatenate n lists
