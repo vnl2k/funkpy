@@ -12,8 +12,7 @@ _FunkPy_ is not an attempt to re-define Python itself. It provides just a skelet
 # Installation
 Copy this repository locally and run `build.py`:
 ```bash
-python3 build.py # to generates tar.gz file
-pip3 install funkpy-x.x.x.tar.gz
+pip3 install --index-url https://test.pypi.org/simple/ funkpy
 ```
 _Tested for Unix systems only._
 

@@ -4,7 +4,8 @@ setup(
   name=__name__,
   version=__version__,
   packages=[__name__],
-  author="Nikolay L. Vaklev",
+  author="vnl2k",
   license='MIT',
-  python_requires='>=3.4'
+  url="https://github.com/vnl2k/funkpy",
+  python_requires='>=3.5'
 )
