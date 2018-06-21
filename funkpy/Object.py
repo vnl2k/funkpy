@@ -1,26 +1,30 @@
-import re, math
+import re
+import math
+from typing import Dict, Any, Sequence, Callable, Pattern, Union
 
-from pyfunctional2.tools import compose, curry 
-from pyfunctional2 import collection as _
+from funkpy import Collection as _
 
-def apply(func, item): 
+
+def __regTest__(regex: Pattern) -> Callable[[str], bool]:
+  reg = re.compile(regex)
+
+  def test(string: str) -> bool:
+    res = reg.search(string)
+    return  True if res != None and res.group(0) != "" else False
+
+  return test
+
+def apply(func: Callable, item: Any) -> Any: 
   return func(item)
 
-def isGood(func, item):
+def isGood(func: Callable, item: Any) -> bool:
   return func(item) is True
 
-def pick(keys, doc):
+def pick(keys: Sequence[str], doc: Dict) -> Dict:
   """Picks the provided keys from the dictionary.
   
   Example
     pick(["a", "b"], {"a": 1, "b": 2, "c": 3}) # => {"a": 1, "b": 2}
-
-  Arguments:
-    keys {List}      -- list of key names which have to be an exact match
-    doc  {Dictionary} 
-  
-  Returns:
-    Dictionary
   """
 
   if not _.isIterable(keys):
@@ -31,36 +35,22 @@ def pick(keys, doc):
 
   return {k: doc.get(k, None) for k in keys}
 
-def pickRegex(keys, doc):
+def pickRegex(keys: Sequence[str], doc: Dict) -> Dict:
   if not isinstance(doc, dict):
     return None
 
-  regex_keys = _.map(regTest, keys)
+  regex_keys = _.map(__regTest__, keys)
+    
+  return pick(
+    _.filter(lambda k: sum(_.map(lambda reg: reg(k), regex_keys))>0, doc.keys() ),
+    doc
+  )
 
-  extract = lambda doc: pick(_.filter(regex_keys, doc.keys()), doc)
-
-  return extract
-
-def regTest(regex):
-
-  def test(str):
-    return  len(re.compile(regex).findall(str))>0
-
-  return test
-
-
-def get(doc, key):
+def get(doc: Dict, key: str) -> Union[Any, None]:
   """Gets the value for key from the dictionary.
   
   Example
     get("a", {"a": 1, "b": 2, "c": 3}) # => 1
-
-  Arguments:
-    doc {Dictionary} 
-    key {String}      -- key name
-  
-  Returns:
-    Any or None
   """
 
   if not isinstance(doc, dict):
@@ -76,20 +66,13 @@ def getValues(doc, keys):
     return None
   return _.map(lambda k: get(doc, k), keys)
 
-def update(doc, new_doc):
-  """ Updates a Dictionary without side-effects.
+def update(doc: Dict, new_doc: Dict) -> Dict:
+  """ Updates a dictionary without side-effects.
   
   Example
     dc = {"a": 1, "b": 2, "c": 3}
     newDC = update(dc, {"d": 4})
     newDC = update(newDC, ("e", 5)) # => {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5}
-    
-  Arguments:
-    doc    {Dictionary}
-    newDoc {Dictionary}
-  
-  Returns:
-    Dictionary
   """
   if not isinstance(doc, dict):
     return None
@@ -129,3 +112,15 @@ class Item:
 
   def getValues(self, keys):
     return getValues(self.val, keys)
+
+
+class exports:
+  """ This class contains all public methods which can be used directly."""
+
+  apply = apply
+  pick = pick
+  isGood = isGood
+  pickRegex = pickRegex
+  get = get
+  getValues = getValues
+  update = update
