@@ -1,4 +1,4 @@
-def test_collection(m, ut):
+def test_collection(m, utils, ut):
 
   class tests(ut.TestCase):
 
@@ -15,6 +15,11 @@ def test_collection(m, ut):
       # Set
       self.assertEqual(m.map(lambda i: i + 1, {1, 2, 3}), {2, 3, 4})
       self.assertEqual(m.map(lambda i, j: i + j, {1, 2, 3}, (1, 2, 3)), {2, 4, 6})
+
+      # dict_keys
+      d = {"a": 1, "b": 1}
+      self.assertEqual(m.map(lambda i: d[i], d.keys()), [1, 1])
+      
       
     def test1a_array_strictMap(self):
       self.assertEqual(m.strictMap(lambda i: i + 1, [1, 2, 3]), [2, 3, 4])
@@ -32,12 +37,32 @@ def test_collection(m, ut):
       self.assertEqual(m.zip((1, 2, 3)), ((1,), (2,), (3,)))
       self.assertEqual(m.zip((1, 2, 3), (1, 2, 3)), ((1, 1), (2, 2), (3, 3)))
 
+      # set
+      self.assertEqual(m.zip({1, 2, 3}, ["1", "2", "3"]), [{1, "1"}, {2, "2"}, {3, "3"}])
+      
     def test3_array_concat(self):
+      # list
       self.assertEqual(m.concat(), [])
       self.assertEqual(m.concat([1]), [1])
       self.assertEqual(m.concat([1], 1), [1, 1])
-      self.assertEqual(m.concat(None, 1, 1), [1, 1])
+      self.assertEqual(m.concat(None, 1, 1), [None, 1, 1])
       self.assertEqual(m.concat([1,2,3], [1, 2, 3], [1, 2, 3]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
+
+      # tuple 
+      self.assertEqual(m.concat((1), (3)), [1, 3])
+      self.assertEqual(m.concat((1, 2), (3, 4)), (1, 2, 3, 4))
+      
+      # set
+      self.assertEqual(m.concat({1, 2}, {3, 4}), {1, 2, 3, 4})
+
+    def test3a_flatten(self):
+      self.assertEqual(m.flatten([[1,2,3], [1, 2, 3], [1, 2, 3]]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
+
+      # the first element of the sequence determines the final type
+      self.assertEqual(m.flatten([(1,2,3), [1, 2, 3], [1, 2, 3]]), (1, 2, 3, 1, 2, 3, 1, 2, 3))
+
+      # sets contain only unique elements
+      self.assertEqual(m.flatten([{1,2,3}, [4, 5, 6], [1, 2, 3]]), {1, 2, 3, 4, 5, 6})
 
     def test4_array_push(self):
       self.assertEqual(m.push([1], 2, 3, [1, 2, 3]), [1, 2, 3, [1, 2, 3]])
@@ -59,10 +84,10 @@ def test_collection(m, ut):
       self.assertEqual(m.isIterable(map(str, [1])), True)
 
     def test7_curry_compose(self):
-      addOne = m.curry(m.strictMap)(lambda i: i+1)
+      addOne = utils.curry(m.strictMap)(lambda i: i+1)
       self.assertEqual(addOne([1, 2, 3]), [2, 3, 4])
 
-      addTwo = m.compose(addOne, addOne)
+      addTwo = utils.compose(addOne, addOne)
       self.assertEqual(addTwo([1, 2, 3]), [3, 4, 5])
 
     def test8_filter(self):
@@ -77,4 +102,8 @@ def test_collection(m, ut):
       # list
       newList = []
       self.assertEqual(m.forEach(lambda i: newList.append(i + 1), [1, 2, 3]) or newList, [2, 3, 4])
+
+    def test9_flatten(self):
+      # list
+      self.assertEqual(m.flatten([[1, 2, 3], [4, 5, 6]]), [1, 2, 3, 4, 5, 6])
   return tests

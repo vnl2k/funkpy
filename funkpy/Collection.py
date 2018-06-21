@@ -1,11 +1,16 @@
 import functools as ft
 import builtins 
-from funkpy.utils import curry, compose
+# from typing import TypeVar, Iterable, Tuple
+from collections import abc
+# from funkpy.utils import curry, compose
 
-def _getClass(iterable):
-  return getattr(builtins, type(iterable).__name__)
+def __getClass__(iterable):
+  if type(iterable).__name__ == "dict_keys":
+    return list
+  else:
+    return getattr(builtins, type(iterable).__name__, list)
 
-def _zip(*iterables):
+def __zip__(*iterables):
   """Zips a tuple of iterables.
   
   Arguments:
@@ -15,7 +20,7 @@ def _zip(*iterables):
     iterable
   """
 
-  target_class = _getClass(iterables[0])
+  target_class = __getClass__(iterables[0])
   sentinel = object()
   iterators = [iter(it) for it in iterables]
 
@@ -29,11 +34,11 @@ def _zip(*iterables):
 
     yield target_class(result)
 
-def _filter(func, iterable):
-  return _getClass(iterable)(builtins.filter(func, iterable))
+def __filter__(func, iterable):
+  return __getClass__(iterable)(builtins.filter(func, iterable))
 
-def _map(func, *iterables): 
-  return _getClass(iterables[0])(builtins.map(func, *iterables))
+def __map__(func, *iterables): 
+  return __getClass__(iterables[0])(builtins.map(func, *iterables))
 
 def isIterable(value):
   """ Checks if the value implements iterator interface.
@@ -43,7 +48,8 @@ def isIterable(value):
   Return:
     boolean
   """
-  return hasattr(value, '__iter__')
+  # return hasattr(value, '__iter__')
+  return isinstance(value, abc.Iterable)
 
 def isSubscriptable(value):
   """ Checks if the value is subscriptable.
@@ -55,6 +61,9 @@ def isSubscriptable(value):
   """
   return hasattr(value, '__getitem__')
 
+def isMutable(seq):
+  return isinstance(seq, abc.MutableSequence)
+
 def isList(value):
   """ Checks if the value is a python list.
 
@@ -65,78 +74,127 @@ def isList(value):
   """
   return isIterable(value) and isSubscriptable(value)
 
-def zip(*iterables):
-  """ Zips collections together. 
+class exports:
 
-  The collections can be of different length.
+  isIterable = isIterable
+  isSubscriptable = isSubscriptable
+  isMutable = isMutable
+  isList = isList
 
-  Examples:
-    # zip lists
-    zip([1, 2, 3] # =>[[1], [2], [3]]
-    zip([1, 2, 3], [1, 2, 3]) # => [[1, 1], [2, 2], [3, 3]]
-    zip(*[[1, 2, 3], [1, 2, 3]]) # => [[1, 1], [2, 2], [3, 3]]
+  @staticmethod
+  def zip(*iterables):
+    """ Zips collections together. 
 
-    # zip tupel
-    zip((1, 2, 3)) # => ((1,), (2,), (3,))
-    zip((1, 2, 3), (1, 2, 3)) # => ((1, 1), (2, 2), (3, 3))
-  
-  Arguments:
-    iterables {tuple} -- N arguments
-  Returns:
-    collection
-  """
-  return _getClass(iterables[0])(_zip(*iterables))
+    The collections can be of different length.
 
-def map(func, *iterables):
-  """ Applies a function on each element of the collection and returns a new collection.
-  
-  Arguments:
-    func      {function}
-    iterables {tuple}    -- N arguments
-  
-  Returns:
-    collection
-  """
-  return _map(func, *iterables)
+    Examples:
+      # zip lists
+      zip([1, 2, 3] # =>[[1], [2], [3]]
+      zip([1, 2, 3], [1, 2, 3]) # => [[1, 1], [2, 2], [3, 3]]
+      zip(*[[1, 2, 3], [1, 2, 3]]) # => [[1, 1], [2, 2], [3, 3]]
 
-def strictMap(func, iterable):
-  """ Applies a function on each element of the collection and returns a new collection. 
-  It is faster that collection.map
+      # zip tupel
+      zip((1, 2, 3)) # => ((1,), (2,), (3,))
+      zip((1, 2, 3), (1, 2, 3)) # => ((1, 1), (2, 2), (3, 3))
+    
+    Arguments:
+      iterables {tuple} -- N arguments
+    Returns:
+      collection
+    """
+    target_class = __getClass__(iterables[0])
+    
+    if target_class == set:
+      # It is not possible to construct a set of sets!
+      target_class = list
 
-  Arguments:
-    func     {fucntion}
-    iterable {collection}
+    return target_class(__zip__(*iterables))
 
-  Returns:
-    collection
-  """
-  return _getClass(iterable)(func(i) for i in iterable)
+  @staticmethod
+  def map(func, *iterables):
+    """ Applies a function on each element of the collection and returns a new collection.
+    
+    Arguments:
+      func      {function}
+      iterables {tuple}    -- N arguments
+    
+    Returns:
+      collection
+    """
+    return __map__(func, *iterables)
 
-def forEach(func, *iterables):
-  """ Applies a function on each element of the collection.
-  
-  Examples:
-    newList = []
-    forEach(lambda i: newList.append(i + 1), [1, 2, 3]) or newList # => [2, 3, 4]
-  
-  Arguments:
-    func      {func} 
-    iterables {tuple} -- N arguments
+  @staticmethod
+  def strictMap(func, iterable):
+    """ Applies a function on each element of the collection and returns a new collection. 
+    It is faster that collection.map
 
-  Returns:
-    None
-  """
-  _map(func, *iterables)
-  return None
+    Arguments:
+      func     {fucntion}
+      iterable {collection}
 
-def reduce(func, arr, agg):
-  return ft.reduce(func, arr, agg)
+    Returns:
+      collection
+    """
+    return __getClass__(iterable)(func(i) for i in iterable)
 
-def concat(arr=None, *args):
-  return ft.reduce(lambda agg, item: (agg.extend(item) if isIterable(item) else agg.append(item)) or agg, args, arr.copy() if (arr and isList(arr)) else [])
+  @staticmethod
+  def forEach(func, *iterables):
+    """ Applies a function on each element of the collection.
+    
+    Examples:
+      newList = []
+      forEach(lambda i: newList.append(i + 1), [1, 2, 3]) or newList # => [2, 3, 4]
+    
+    Arguments:
+      func      {func} 
+      iterables {tuple} -- N arguments
 
-def push(arr=None, *args):
-  return ft.reduce(lambda agg, item: agg.append(item) or agg, args, arr.copy() if (arr and isList(arr)) else [])
+    Returns:
+      None
+    """
+    __map__(func, *iterables)
+    return None
 
-def filter(func, arr):
-  return _filter(func, arr)
+  @staticmethod
+  def reduce(func, arr, agg):
+    return ft.reduce(func, arr, agg)
+
+  @staticmethod
+  def concat(*args):
+    if (len(args)==0): 
+      return []
+    
+    arr = args[0]
+    if isIterable(arr) == False:
+      arr = [arr]
+
+    target_class = __getClass__(arr)
+
+    if isMutable(arr) == False:
+      arr = list(arr)
+
+    return target_class(ft.reduce(
+      lambda agg, item: (agg.extend(item) if isIterable(item) else agg.append(item)) or agg, \
+      args[1:], \
+      arr.copy() if isMutable(arr) else list(arr)
+    ))
+
+  @staticmethod
+  def flatten(seq):
+    """Flattens a sequenece. The type of the first element determines return type
+    
+    Arguments:
+      seq {collection} -- list, tupple or set
+    
+    Returns:
+      collection
+    """
+    return exports.concat(*seq)
+
+  @staticmethod
+  def push(arr=None, *args):
+    return ft.reduce(lambda agg, item: agg.append(item) or agg, args, arr.copy() if (arr and isList(arr)) else [])
+
+  @staticmethod
+  def filter(func, arr):
+    return __filter__(func, arr)

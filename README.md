@@ -31,6 +31,11 @@ _.concat(l, [4, 5, 6], [7, 8, 9], 10) # => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # append a list
 _.push(l, [4, 5, 6]) # => [1, 2, 3, [4, 5, 6]]
 
+# flatten a list of lists
+_.concat(*[[1, 2, 3], [1, 2, 3]]) # => [1, 2, 3, 1, 2, 3]
+# is equivalent to
+_.flatten([[1, 2, 3], [1, 2, 3]]) # => [1, 2, 3, 1, 2, 3]
+
 # It's crazy to curry and compose!
 addOne = _.curry(_.strictMap)(lambda i: i+1)
 addOne([1, 2, 3]) # => [2, 3, 4]
