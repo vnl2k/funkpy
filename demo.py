@@ -1,5 +1,5 @@
-from pyfunctional2 import collection as _
-from pyfunctional2.monads import Functor, Monad, Option, Either
+from funkpy import Collection as _
+from funkpy.Monads import Functor, Monad, Option, Either
 
 l = [1, 2, 3]
 # concatenate n lists
