@@ -1,5 +1,6 @@
 from funkpy import Collection as _
-from funkpy.Monads import Functor, Monad, Option, Either
+from funkpy.Monads import Functor, Monad, Option
+from funkpy.utils import curry, compose
 
 l = [1, 2, 3]
 # concatenate n lists
@@ -8,10 +9,10 @@ _.concat(l, [4, 5, 6], [7, 8, 9], 10) # => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # append a list
 _.push(l, [4, 5, 6]) # => [1, 2, 3, [4, 5, 6]]
 
-addOne = _.curry(_.strictMap)(lambda i: i+1)
+addOne = curry(_.strictMap)(lambda i: i+1)
 print(addOne([1, 2, 3])) # => [2, 3, 4]
 
-addTwo = _.compose(addOne, addOne)
+addTwo = compose(addOne, addOne)
 print(addTwo([1, 2, 3])) # => [3, 4, 5]
 
 
