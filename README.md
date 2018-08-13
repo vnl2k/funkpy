@@ -1,20 +1,20 @@
 # FunkPy
 _FunkPy_ is a small library which is trying to bring a few well-established concepts from functional programing to Python. The package was inspired by libraries like [lodash](https://lodash.com/) and [rambdajs](http://ramdajs.com/). The monads section is modeled after [Scala](https://www.scala-lang.org/) and influenced heavily by ["Scala with Cats"](https://underscore.io/books/scala-with-cats/)
 
-One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can incredibly powerful if one needs to efficiently process thousands of entries in list. They less convenient when the list has just 3 items. Hence, `funkpy.Collection` was born. `Collection` provides an implementation for side-effect free operations on lists, whereas most in-built list operations are anything but.
+The name _FunkPy_ comes from the necessity to choose a name, which did not clash with any exiting packages. It turned out there are plenty of those around, e.g. [PyFunctional](https://github.com/EntilZha/PyFunctional) and many more abandoned projects. Moreover, there is something funky about functional programming.
+
+One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can be incredibly powerful if one needs to efficiently process thousands of entries. They are less convenient when the list has just 3 items. Hence, `funkpy.Collection` was born. `Collection` provides an implementation for side-effect free operations on collections, whereas many built-in operations are anything but.
 
 Functional programing is not complete without `curry` and `compose` methods available directly from `funkpy.uitls` or `funkpy.Collection`.
 
 Last but not least are the glorious _functor_ and _monads_ from `funkpy.Monads`, which many people are unfamiliar with.  
 
-_FunkPy_ is not an attempt to re-define Python itself. It provides just a skeleton for more functional way of writing code and that's it. Also the implementation here does not make any claims on performance. Whereas, there are no obvious problems, wrapping millions of values in a monad each may not be the right answer.
+_FunkPy_ is not an attempt to re-define Python. It provides simple tools for more functional way of writing code and that's it. The implementation here does not make any claims on performance. Whereas, there are no obvious problems with functional approaches in Python, wrapping millions of values in a monad each, is not the right answer, either.
 
 # Installation
-Copy this repository locally and run `build.py`:
 ```bash
-pip3 install --index-url https://test.pypi.org/simple/ funkpy
+pip3 install funkpy
 ```
-_Tested for Unix systems only._
 
 # Examples
 
@@ -89,11 +89,13 @@ my_option = Option.of({"street": "Times Ave"}) \
 ```
 
 # Contributors
-In case someone wants to contribute to this project (for whatever unfathomable reasons that is), here are few rules (for pylint) which differ from [Python's PEP8 style guide](https://www.python.org/dev/peps/pep-0008/):
+In case someone wants to contribute to this project, for whatever reasons, here are few rules (for pylint) which differ from [Python's PEP8 style guide](https://www.python.org/dev/peps/pep-0008/):
 
 * longer lines are ok  => `max-line-length=150`;
 * but empty spaces are gone => `indent-string='  '` (double space only);
 * and underscore are discouraged in function names => `function-naming-style=camelCase`;
-* Two spaces required inside a hanging  or continued line => indent-after-paren=2;
+* two spaces required inside a hanging or continued line => `indent-after-paren=2`;
 
-If, heaven forbid, you find a bug, just raise a ticket for it!
+The project is linked to Travis CI and every build is tested automatically.
+
+If, heaven forbid, you got this far and found bugs, just raise tickets on GitHub!
