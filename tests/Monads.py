@@ -1,3 +1,5 @@
+from tests.utils.class_size import get_class_size
+
 def test_monads(m, ut):
 
   class tests(ut.TestCase):
@@ -18,7 +20,7 @@ def test_monads(m, ut):
         except Exception as ex:
           # return Exception(*ex.args)
           return ex
-      self.assertEqual(m.Either.of(f()).either(lambda i: i,lambda i: i).args,('division by zero',))
+      self.assertEqual(m.Either.of(f()).either(lambda i: i,lambda i: i).args, ('division by zero',))
 
    
     def test3_option(self):
@@ -37,5 +39,17 @@ def test_monads(m, ut):
       addOne = lambda i: m.Option.of(i+1)
       self.assertEqual(m.Option.of(1).flatMap(addOne) == m.Option.of(2), True)
       self.assertEqual(m.Option.of(1).flatMap(addOne).flatMap(addOne) == m.Option.of(1).flatMap(lambda i: addOne(i).flatMap(addOne)), True)
+
+    def test5_monad_size_in_bytes(self):
+      oneFunctor = m.Functor.of(1)
+      oneMonad = m.Monad.of(1)
+      oneOption = m.Option.of(1)
+      oneEither = m.Either.of(1)
+
+      # the size is in bytes
+      self.assertEqual(get_class_size(oneFunctor), 48)
+      self.assertEqual(get_class_size(oneMonad), 176)
+      self.assertEqual(get_class_size(oneOption), 176)
+      self.assertEqual(get_class_size(oneEither), 176)
 
   return tests
