@@ -37,7 +37,7 @@ def __zip__(*iterables):
 def __filter__(func, iterable):
   return __getClass__(iterable)(builtins.filter(func, iterable))
 
-def __map__(func, *iterables): 
+def __map__(func, *iterables):
   return __getClass__(iterables[0])(builtins.map(func, *iterables))
 
 def isIterable(value):
@@ -48,7 +48,6 @@ def isIterable(value):
   Return:
     boolean
   """
-  # return hasattr(value, '__iter__')
   return isinstance(value, abc.Iterable)
 
 def isSubscriptable(value):

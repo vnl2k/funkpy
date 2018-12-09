@@ -3,6 +3,6 @@ from funkpy.Collection import exports as Collection
 import funkpy.Monads
 from funkpy.Object import exports as Object
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __name__ = "funkpy"
 __license__ = "MIT"
