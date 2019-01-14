@@ -3,7 +3,7 @@ _FunkPy_ is a small library which is trying to bring a few well-established conc
 
 The name _FunkPy_ comes from the necessity to choose a name, which did not clash with any exiting packages. It turned out there are plenty of those around, e.g. [PyFunctional](https://github.com/EntilZha/PyFunctional) and many more abandoned projects. Moreover, there is something funky about functional programming.
 
-(Pytoolz)[https://github.com/pytoolz/toolz] is an active project which is well document and in use. It is definitely worth having a look.
+[Pytoolz](https://github.com/pytoolz/toolz) is an active project which is well document and it is definitely worth having a look.
 
 One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can be incredibly powerful if one needs to efficiently process thousands of entries. They are less convenient when the list has just 3 items. Hence, `funkpy.Collection` was born. `Collection` provides an implementation for side-effect free operations on collections, whereas many built-in operations are anything but.
 
