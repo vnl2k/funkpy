@@ -90,6 +90,10 @@ def test_collection(m, utils, ut):
       addTwo = utils.compose(addOne, addOne)
       self.assertEqual(addTwo([1, 2, 3]), [3, 4, 5])
 
+      cmap = utils.curry(m.map)(lambda i: i + 1)
+      self.assertEqual(cmap([1, 2, 3]), [2, 3, 4])
+
+
     def test8_filter(self):
       # list
       self.assertEqual(m.filter(lambda i: i>2, [1, 2, 3]), [3])

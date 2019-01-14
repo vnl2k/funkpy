@@ -58,7 +58,7 @@ def curry(f):
   TypeError: foo() takes exactly 3 arguments (4 given)
   """
   def curried(*args, **kwargs):
-    if len(args) + len(kwargs) >= f.__code__.co_argcount:
+    if len(args) + len(kwargs) >= max(f.__code__.co_argcount, len(f.__code__.co_varnames)):
       return f(*args, **kwargs)
     return (lambda *args2, **kwargs2: curried(*(args + args2), **dict(kwargs, **kwargs2)))
 

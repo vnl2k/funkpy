@@ -1,6 +1,10 @@
 class Functor:
   """ A container with a map interface. """
 
+  # Prevents the class from creating a dictionary with 'val' key,
+  # which helps save on memory usage. There is a test for this.
+  __slots__ = ['val']
+
   def __init__(self, value=None):
     self.val = value
 
