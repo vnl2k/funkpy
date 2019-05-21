@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import Callable, TypeVar, Union #, Generic
 
 T = TypeVar('T') # generic type
@@ -18,7 +19,10 @@ class Accumulator:
 
 
 A = TypeVar(Accumulator)
+
+# the step returns either an accumuklator A or transformed value T
 Step = TypeVar(Callable[[A, T], Union[A, T]])
+
 Reducer = TypeVar(Callable[[A, T], A])
 
 def __map__(map_func: Callable[[T], T]) -> Callable[[Step], Reducer]:
@@ -35,21 +39,21 @@ def __filter__(predicate_func) -> Callable[[Step], Reducer]:
 
 def __compose__(*transducers):
 
-  reversedTrns = transducers.copy()
+  reversedTrns = list(transducers)
   reversedTrns.reverse()
 
   def f(shared_step: Step):
-    l = list(map(lambda t: t(shared_step), reversedTrns))
+    return reduce(lambda step, t: t(step), reversedTrns, shared_step)
 
   return f
 
-def __into__():
-  return None
+def __into__(r: Reducer, input, acc: A):
+  return reduce(r, input, acc)
 
 class exports:
 
   map = __map__
-  
+
   filter = __filter__
 
   compose = __compose__
