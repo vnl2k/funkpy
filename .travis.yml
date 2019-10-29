@@ -2,5 +2,17 @@ language: python
 python:
   - "3.5"
   - "3.6"
+  - "3.7"
 script: "python all-tests.py"
-# install: pip install --user -r requirements.txt
+deploy:
+  provider: pypi
+  user: vnl2k
+  password:
+    secure: 
+  # install: pip install --user -r requirements.txt
+  # 
+  # echo "passsfgdf" | openssl rsautl -pubin -inkey travis-CI-public.pem -encrypt -out pass.enc
+  # 
+  # FETCH PUBLIC KEY
+  # curl -L http://api.travis-ci.org/repos/vnl2k/funkpy/key
+  # -----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA8pqbhAkgPEpY1NnOlYqh\nXkQWeNuyu3Tn+9UeZ65/PFvq2Rk/g/EAcbr+MCfdIRABxIZ4YRK2sAp88ldE8GkY\nBu6NIEgopzz20fjO41njmAUmvw3A51FepCyoSRn/3sXljy90fZpQ9kZwBmzLPuVc\nokc7XLgR4n8Zna3iKZWbu1uyqzWJE3u5LfLkz9T5jkswBQ5IDnY/TggbL7nAoode\nB/lRr/cDt5FIjscoCn5bBABibhx3G/itaCmOz5Kve7JEv61CiXeTRLDpH/A1gX5H\n0aVbBkJcAYMhFsX7wRujWZg/wJvOLGD9fvyW0QqX396xq/wuQM5IyGADGrexGrPo\nygDiRtQK7YOroApkku/O5lEE3ThPW16iMJcD2zaakoi7UqKUiga6qJCs5J9bfgKd\nnxdoRuX4GxdoC1dP5ELh0oCxoUB9E9KBe7dKBste6JVq09+lyowF9koQXqHzqK1v\nPLtTyaOBqe3Oi6nqF4AmARlR1ehrHCINGExf5RevP4CVSUA6zJyCR7fFNmXjFjg2\nmTh/zMOUZXEfY3CsQpy44YL3YbxiS/qwaDoRGe/ngMT5E2OHVb/G/VreYZXOoNHd\n+aFhb4lamX+raRK58qtFWBziBCqT+TTC6C9ZBUppFPjY7O6+5adBnAX+AisFCChm\nmXrEPkKexqt5iIfIgnLGuo8CAwEAAQ==\n-----END PUBLIC KEY-----\n

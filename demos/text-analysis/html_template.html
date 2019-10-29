@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Eigen Test</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <style type="text/css">
+      table,
+      td {
+        border-bottom: 1px solid #333;
+      }
+
+      td, th {
+        vertical-align:top;
+      }
+
+      thead,
+      tfoot {
+        background-color: #333;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Word(#)</th>
+          <th>Documents</th>
+          <th>Sentences containing the word</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for row in items %}
+          <tr>
+          {%- for column in row %}
+            <td>{{ column }}</td>
+          {%- endfor %}
+          </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
