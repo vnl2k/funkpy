@@ -19,6 +19,12 @@ def test_collection(m, utils, ut):
       # dict_keys
       d = {"a": 1, "b": 1}
       self.assertEqual(m.map(lambda i: d[i], d.keys()), [1, 1])
+
+      # strings
+      # self.assertEqual(m.map(lambda i: 'a', 'bb'), ['a', 'a'])
+      self.assertEqual(m.map(lambda i: 'a', 'bb'), 'aa')
+      # self.assertEqual(m.map(lambda i, j: i + j, 'bb', 'cc'), ['bc', 'bc'])
+      self.assertEqual(m.map(lambda i, j: i + j, 'bb', 'cc'), 'bcbc')
       
       
     def test1a_array_strictMap(self):
@@ -39,6 +45,10 @@ def test_collection(m, utils, ut):
 
       # set
       self.assertEqual(m.zip({1, 2, 3}, ["1", "2", "3"]), [{1, "1"}, {2, "2"}, {3, "3"}])
+
+      # string
+      self.assertEqual(m.zip('aaa', 'bbb'), 'ababab')
+      
       
     def test3_array_concat(self):
       # list

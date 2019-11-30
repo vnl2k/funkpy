@@ -1,14 +1,17 @@
 import functools as ft
-import builtins 
-# from typing import TypeVar, Iterable, Tuple
+import builtins
 from collections import abc
-# from funkpy.utils import curry, compose
 
 def __getClass__(iterable):
-  if type(iterable).__name__ == "dict_keys":
+  class_name = type(iterable).__name__
+
+  if class_name == "dict_keys":
     return list
-  else:
-    return getattr(builtins, type(iterable).__name__, list)
+
+  if class_name == 'str':
+    return lambda it: "".join([s for s in it])
+
+  return getattr(builtins, type(iterable).__name__, list)
 
 def __zip__(*iterables):
   """Zips a tuple of iterables.
@@ -160,16 +163,16 @@ class exports:
 
   @staticmethod
   def concat(*args):
-    if (len(args)==0): 
+    if len(args) == 0: 
       return []
     
     arr = args[0]
-    if isIterable(arr) == False:
+    if isIterable(arr) is False:
       arr = [arr]
 
     target_class = __getClass__(arr)
 
-    if isMutable(arr) == False:
+    if isMutable(arr) is False:
       arr = list(arr)
 
     return target_class(ft.reduce(
