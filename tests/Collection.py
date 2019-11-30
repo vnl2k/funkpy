@@ -56,7 +56,7 @@ def test_collection(m, utils, ut):
       self.assertEqual(m.concat([1]), [1])
       self.assertEqual(m.concat([1], 1), [1, 1])
       self.assertEqual(m.concat(None, 1, 1), [None, 1, 1])
-      self.assertEqual(m.concat([1,2,3], [1, 2, 3], [1, 2, 3]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
+      self.assertEqual(m.concat([1, 2, 3], [1, 2, 3], [1, 2, 3]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
 
       # tuple 
       self.assertEqual(m.concat((1), (3)), [1, 3])
@@ -66,13 +66,13 @@ def test_collection(m, utils, ut):
       self.assertEqual(m.concat({1, 2}, {3, 4}), {1, 2, 3, 4})
 
     def test3a_flatten(self):
-      self.assertEqual(m.flatten([[1,2,3], [1, 2, 3], [1, 2, 3]]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
+      self.assertEqual(m.flatten([[1, 2, 3], [1, 2, 3], [1, 2, 3]]), [1, 2, 3, 1, 2, 3, 1, 2, 3])
 
       # the first element of the sequence determines the final type
-      self.assertEqual(m.flatten([(1,2,3), [1, 2, 3], [1, 2, 3]]), (1, 2, 3, 1, 2, 3, 1, 2, 3))
+      self.assertEqual(m.flatten([(1, 2, 3), [1, 2, 3], [1, 2, 3]]), (1, 2, 3, 1, 2, 3, 1, 2, 3))
 
       # sets contain only unique elements
-      self.assertEqual(m.flatten([{1,2,3}, [4, 5, 6], [1, 2, 3]]), {1, 2, 3, 4, 5, 6})
+      self.assertEqual(m.flatten([{1, 2, 3}, [4, 5, 6], [1, 2, 3]]), {1, 2, 3, 4, 5, 6})
 
     def test4_array_push(self):
       self.assertEqual(m.push([1], 2, 3, [1, 2, 3]), [1, 2, 3, [1, 2, 3]])
