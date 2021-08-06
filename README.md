@@ -7,7 +7,7 @@ The name _FunkPy_ comes from the necessity to choose a name, which did not clash
 
 One of the main drivers to start this library was the frustrating switch to generators/iterators in Python 3.x. They can be incredibly powerful if one needs to efficiently process thousands of entries. They are less convenient when the list has just 3 items. Hence, `funkpy.Collection` was born. `Collection` provides an implementation for side-effect free operations on collections, whereas many built-in operations are anything but.
 
-Functional programing is not complete without `curry` and `compose` methods available directly from `funkpy.uitls` or `funkpy.Collection`.
+Functional programing is not complete without `curry` and `compose` methods available directly from `funkpy.utils` or `funkpy.Collection`.
 
 Last but not least are the glorious _functor_ and _monads_ from `funkpy.Monads`, which many people are unfamiliar with.  
 

@@ -1,3 +1,10 @@
+from typing import Callable, TypeVar, Generic, Union
+
+# allow class names to be used as return types in the class definition
+from __future__ import annotations
+
+from utils import compose
+
 class Functor:
   """ A container with a map interface. """
 
@@ -160,7 +167,7 @@ class Option(Monad):
     """
     return Option(val)
 
-  def flatMap(self, func):
+  def flatMap(self, func) -> Option:
     """ (M[A], A => M[B]) => M[B]
 
     Arguments:
@@ -168,7 +175,7 @@ class Option(Monad):
     """
     return self if self == Option.Nothing else func(self.val)
 
-  def map(self, func):
+  def map(self, func) -> Option:
     """ (M[A], A => B) => M[B]
 
     Transforms the value inside the container
@@ -183,3 +190,55 @@ class Option(Monad):
     """ Returns either the value inside the container or val2. """
 
     return val2 if self == Option.Nothing else self.val
+
+# IMPLEMENTATION IDEAS
+# https://medium.com/@magnusjt/the-io-monad-in-javascript-how-does-it-compare-to-other-techniques-124ef8a35b63
+# https://gcanti.github.io/fp-ts/modules/IO.ts.html
+# https://wiki.haskell.org/All_About_Monads#The_IO_monad
+# 
+# 
+
+T = TypeVar('T') # generic type A
+A = TypeVar('A') # generic type A
+B = TypeVar('B') # generic type B
+M = TypeVar('M') # Monad
+
+Effect = Callable[None, T]
+
+class IO(Generic[T]):
+
+  def __init__(self, effect: Effect[T]):
+    self.effect = effect
+
+  def eval(self: IO[T], catch: B) -> Union[T, B]:
+    try:
+      return self.effect()
+    except:
+      return catch
+
+  @staticmethod
+  def of(effect: Effect[T]) -> IO[T]:
+    return IO(effect)
+
+  # FLATMAP CAN BE USED TO DO EAGER EXECUTION AS WELL 
+  # THERE IS NO FLATMAP FOR MOSTLY-ADEQUATE-GUIDE
+  # flatMap :: (A => IO[B]) => IO[B] 
+  def flatMap(self, func: Callable[[A], IO[B]]) -> IO[B]:
+    return IO(lambda: func(self.effect()).effect())
+
+  def map(self, func: Callable[[A], B]) -> IO[B]:
+    return IO(lambda: func(self.effect()) )
+
+  def mapWithCompose(self, func: Callable[[A], B]) -> IO[B]:
+    return IO(compose(func, self.effect))
+
+
+io = IO.of(lambda: 1/0)
+io = io.map(lambda i: i + 1)
+io.flatMap(lambda i: IO.of(lambda: i + 1))
+
+# compose(\
+#   lambda blob: 'ok' if blob.exists() else blob.upload_from_string(data_source), \
+#   lambda bucket: bucket.blob(path), \
+#   lambda client: client.bucket(BUCKET_NAME), \
+#   storage.Client)
